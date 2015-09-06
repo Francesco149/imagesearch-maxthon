@@ -1,0 +1,37 @@
+﻿[
+	{
+		"type" : "extension", 
+		"frameworkVersion" : "1.0.6", 
+		"guid" : "{93672D84-4B69-4D21-BBD1-8B7265547183}", 
+		"version" : "1.0.1", 
+		"author" : {
+			"name" : "Franc[e]sco", 
+			"email" : "lolisamurai@tfwno.gf"
+		}, 
+		
+		"title" : {
+			"_t" : "app.title"
+		}, 
+		
+		"icon" : "imagesearch", 
+		"svg_icon" : "imagesearch.svg", 
+		
+		"description" : {
+			"_t" : "app.description"
+		}, 
+		
+		"actions" : [
+			{
+				"type" : "script", 
+				
+				"entryPoints" : [
+					"doc_onload"
+				], 
+				
+				"js" : [
+					"imagesearch.js"
+				]
+			}
+		]
+	}
+]
