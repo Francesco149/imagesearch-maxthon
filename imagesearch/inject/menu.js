@@ -39,15 +39,14 @@ function imgsrcInit() {
 	console.info("{0} {1}".format(imgsrcInitializing(), imgsrcTitle()));
 		
 	var img = $('<div>').attr('id', 'imgsrc-hover-popup');
-	var body = $('body');
 	var selector = 'img';
-
-	// show the popup       
-	function showMenu(e) {
-		var target = $(e.target);
-		
+	var ctrlDown = false;
+	var target = undefined;
+	
+	// show the popup  
+	function showMenu() {
 		// ignore invalid images
-		if (typeof target.attr('src') == 'undefined') {
+		if (typeof target == 'undefined' || typeof target.attr('src') == 'undefined') {
 			return;
 		}
 		
@@ -112,12 +111,36 @@ function imgsrcInit() {
 			.css('font-style', 'italic')
 			.css('text-align', 'right');
 		
-		console.info('(' + tp.top + ',' + tp.left + ') -> ' + imgurl);
+		console.debug('(' + tp.top + ',' + tp.left + ') -> ' + imgurl);
+	}
+	
+	// hide the popup
+	function hideMenu() {
+		img.css('display', 'none');
+	}
+	
+	// updates the ctrl keydown status
+	function updateCtrl(e) {
+		ctrlDown = e.ctrlKey;
+		//console.debug(ctrlDown);
+		if (ctrlDown) {
+			showMenu();
+		} else {
+			hideMenu();
+		}
+	}
+     
+	function mouseOver(e) {
+		target = $(e.target);
+		
+		if (ctrlDown) {
+			showMenu();
+		}
 	}
 
-	// hide the popup
-	function hideMenu(e) {
-		img.css('display', 'none');
+	function mouseLeave(e) {
+		hideMenu();
+		target = undefined;
 	}
 
 	// create the popup placeholder
@@ -141,8 +164,11 @@ function imgsrcInit() {
 	// bind mouse events
 	img.mouseenter(function(e) { img.css('display', 'block'); });
 	img.mouseleave(function(e) { img.css('display', 'none'); });
-	$(body).on('mouseenter', selector, showMenu);
-	$(body).on('mouseleave', selector, hideMenu);
+	$(document).on('mouseenter', selector, mouseOver);
+	$(document).on('mouseleave', selector, mouseLeave);
+	$(document).mousemove(updateCtrl);
+	$(document).keydown(updateCtrl);
+	$(document).keyup(updateCtrl);
 	
 	console.info("{0} {1}".format(imgsrcTitle(), imgsrcIsReady()));
 }
